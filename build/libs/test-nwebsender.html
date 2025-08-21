@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NWebsender Test</title>
+</head>
+<body>
+    <h1>NWebsender Connection Test</h1>
+    <input type="text" id="command" placeholder="Command (e.g. help)">
+    <button onclick="testConnection()">Test Connection</button>
+    <div id="result"></div>
+
+    <script>
+        function testConnection() {
+            const command = document.getElementById('command').value || 'help';
+            const secretKey = '4AjEQxnIcxtS8TFfwwsEklwet7ZnQU2z'; // Replace with your actual key
+            
+            fetch('http://31.57.60.13:25866/execute', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    key: secretKey,
+                    command: command
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('result').innerHTML = 
+                    `<p style="color:green">Success! Response: ${JSON.stringify(data)}</p>`;
+            })
+            .catch(error => {
+                document.getElementById('result').innerHTML = 
+                    `<p style="color:red">Error: ${error.message}</p>`;
+            });
+        }
+    </script>
+</body>
+</html>
